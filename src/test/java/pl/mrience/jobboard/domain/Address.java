@@ -1,5 +1,6 @@
 package pl.mrience.jobboard.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,11 +8,13 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 @Table(name = "addresses")
 @Setter
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor
 public class Address {
 
@@ -32,4 +35,7 @@ public class Address {
     @Size(max = 6, min = 6)
     @Column(name = "postal_code")
     private String postalCode;
+
+    @ManyToMany(mappedBy = "addresses")
+    private Set<JobAd> jobAds;
 }

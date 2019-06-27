@@ -1,5 +1,6 @@
 package pl.mrience.jobboard.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,11 +11,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "job_ads")
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 public class JobAd {
 
@@ -51,4 +54,20 @@ public class JobAd {
     @ManyToOne
     @JoinColumn(name = "nip")
     private Company company;
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "notices_addresses",
+            joinColumns = { @JoinColumn(name = "job_ad_id") },
+            inverseJoinColumns = { @JoinColumn(name = "address_id") }
+    )
+    private Set<Address> addresses;
+
+    @ManyToMany//(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}) //check it!!!
+    @JoinTable(
+            name = "keywords_jobads",
+            joinColumns = { @JoinColumn(name = "job_ad_id") },
+            inverseJoinColumns = { @JoinColumn(name = "keyword") }
+    )
+    private Set <Keyword> keywords;
 }

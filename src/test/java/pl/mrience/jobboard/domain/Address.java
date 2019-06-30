@@ -8,13 +8,13 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "addresses")
 @Setter
 @Getter
-@EqualsAndHashCode
 @NoArgsConstructor
 public class Address {
 
@@ -38,4 +38,17 @@ public class Address {
 
     @ManyToMany(mappedBy = "addresses")
     private Set<JobAd> jobAds;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Address)) return false;
+        Address address = (Address) o;
+        return Objects.equals(getAddressId(), address.getAddressId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

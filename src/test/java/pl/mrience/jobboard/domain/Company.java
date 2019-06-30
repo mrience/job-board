@@ -4,21 +4,23 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "companies")
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 public class Company {
 
     @Id
+    @NaturalId
     private Integer nip;
 
     @NotBlank
@@ -39,4 +41,17 @@ public class Company {
     @OneToMany(mappedBy = "company")
     private Set <JobAd> jobAds;
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Company company = (Company) o;
+        return nip.equals(company.nip);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nip);
+    }
 }

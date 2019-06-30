@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -17,7 +16,6 @@ import java.util.Set;
 @Table(name = "job_ads")
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 public class JobAd {
 
@@ -48,9 +46,6 @@ public class JobAd {
     private String linkToForm;
 
     @NotBlank
-    private Integer nip;
-
-    @NotBlank
     @ManyToOne
     @JoinColumn(name = "nip")
     private Company company;
@@ -70,4 +65,17 @@ public class JobAd {
             inverseJoinColumns = { @JoinColumn(name = "keyword") }
     )
     private Set <Keyword> keywords;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof JobAd)) return false;
+        JobAd jobAd = (JobAd) o;
+        return getJobAdId().equals(jobAd.getJobAdId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

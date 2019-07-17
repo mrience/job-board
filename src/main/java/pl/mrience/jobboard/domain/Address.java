@@ -1,5 +1,6 @@
 package pl.mrience.jobboard.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,11 +16,12 @@ import java.util.Set;
 @Table(name = "addresses")
 @Setter
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Address {
 
     @Id
     @GeneratedValue
+    @Setter(AccessLevel.NONE)
     private Integer addressId;
 
     @NotBlank
@@ -36,7 +39,7 @@ public class Address {
     private String postalCode;
 
     @ManyToMany(mappedBy = "addresses")
-    private Set<JobAd> jobAds;
+    private Set<JobAd> jobAds = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -49,5 +52,42 @@ public class Address {
     @Override
     public int hashCode() {
         return 31;
+    }
+
+    public static class AddressBuilder {
+        private String city;
+        private String street;
+        private String state;
+        private String postalCode;
+
+        public Address build()  {
+            Address address = new Address();
+            address.setCity(this.city);
+            address.setStreet(this.street);
+            address.setState(this.state);
+            address.setPostalCode(this.postalCode);
+
+            return address;
+        }
+
+        public AddressBuilder city(String city) {
+            this.city = city;
+            return this;
+        }
+
+        public AddressBuilder street(String street) {
+            this.street = street;
+            return this;
+        }
+
+        public AddressBuilder state(String state) {
+            this.state = state;
+            return this;
+        }
+
+        public AddressBuilder postalCode( String postalCode) {
+            this.postalCode = postalCode;
+            return this;
+        }
     }
 }

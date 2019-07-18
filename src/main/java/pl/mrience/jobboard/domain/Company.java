@@ -17,7 +17,7 @@ import java.util.Set;
 @Table(name = "companies")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Company {
 
     @Id
@@ -42,16 +42,6 @@ public class Company {
 
     @OneToMany(mappedBy = "company")
     private Set <JobAd> jobAds = new HashSet<>();
-
-    public void addJobAd(JobAd jobAd) {
-        this.jobAds.add(jobAd);
-        jobAd.setCompany(this);
-    }
-
-    public void removeJobAd(JobAd jobAd) {
-        this.jobAds.remove(jobAd);
-        jobAd.setCompany(null);
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -109,4 +99,14 @@ public class Company {
             return this;
         }
     }
+
+//    public void addJobAd(JobAd jobAd) {
+//        this.jobAds.add(jobAd);
+//        jobAd.setCompany(this);
+//    }
+//
+//    public void removeJobAd(JobAd jobAd) {
+//        this.jobAds.remove(jobAd);
+//        jobAd.setCompany(null);
+//    }
 }

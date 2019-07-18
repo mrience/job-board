@@ -13,13 +13,12 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Stream;
 
 @Entity
 @Table(name = "job_ads")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JobAd {
 
     @Id
@@ -70,32 +69,6 @@ public class JobAd {
             inverseJoinColumns = { @JoinColumn(name = "keyword") }
     )
     private Set <Keyword> keywords = new HashSet<>();
-
-
-    public void addAddress(Address address) {
-        this.getAddresses().add(address);
-        address.getJobAds().add(this);
-    }
-
-    public void removeAddress(Address address) {
-        this.getAddresses().remove(address);
-        address.getJobAds().remove(this);
-    }
-
-    public void addKeyword(Keyword keyword) {
-        this.getKeywords().add(keyword);
-        keyword.getJobAds().add(this);
-    }
-
-    public void removeKeyword(Keyword keyword) {
-        this.getKeywords().remove(keyword);
-        keyword.getJobAds().remove(this);
-    }
-
-    public void removeCompany(Company company){
-        this.company = null;
-        company.getJobAds().remove(this);
-    }
 
     @Override
     public boolean equals(Object o) {

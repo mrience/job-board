@@ -16,7 +16,7 @@ import java.util.Set;
 @Table(name = "addresses")
 @Setter
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
 
     @Id

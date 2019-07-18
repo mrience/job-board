@@ -10,17 +10,17 @@ https://trello.com/b/BPRVmvi0/job-board
 
 ##### As a company:
 - authentication and authorization for companies
-- CRUD operations on notices for companies
-- displaying own notices
+- CRUD operations on job ads for companies
+- displaying own job ads
 
 ##### As an user:
-- pass city and keywords to filter notices
-- show list of notices
-- show a particular notice
+- pass city and keywords to filter job ads
+- show list of job ads
+- show particular job ads
 
 ## technologies to be used:
 - Spring-Boot
-- Hibernate
+- Hibernate/Spring Data JPA
 - MySQL
 - Maven
 - Trello

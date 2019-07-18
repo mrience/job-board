@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class Keyword {
     private String keyword;
 
     @ManyToMany(mappedBy = "keywords")
-    private Set<JobAd> jobAds;
+    private Set<JobAd> jobAds = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

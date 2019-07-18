@@ -1,5 +1,6 @@
 package pl.mrience.jobboard.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,12 +17,13 @@ import java.util.Set;
 @Table(name = "companies")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Company {
 
     @Id
     @NaturalId
-    private Integer nip;
+    @Setter(AccessLevel.PRIVATE)
+    private String nip;
 
     @NotBlank
     @Size(max = 45)
@@ -38,8 +41,7 @@ public class Company {
     private String logo;
 
     @OneToMany(mappedBy = "company")
-    private Set <JobAd> jobAds;
-
+    private Set <JobAd> jobAds = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -53,4 +55,58 @@ public class Company {
     public int hashCode() {
         return Objects.hash(nip);
     }
+
+    public static class CompanyBuilder {
+        private String nip;
+        private String name;
+        private String password;
+        private String email;
+        private String logo;
+        private Set <JobAd> jobAds = new HashSet<>();
+
+        public Company build() {
+            Company company = new Company();
+            company.setNip(this.nip);
+            company.setName(this.name);
+            company.setPassword(this.password);
+            company.setEmail(this.email);
+            company.setLogo(this.logo);
+            return company;
+        }
+
+        public CompanyBuilder nip(String nip) {
+            this.nip = nip;
+            return this;
+        }
+
+        public CompanyBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public CompanyBuilder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public CompanyBuilder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public CompanyBuilder logo(String logo) {
+            this.logo = logo;
+            return this;
+        }
+    }
+
+//    public void addJobAd(JobAd jobAd) {
+//        this.jobAds.add(jobAd);
+//        jobAd.setCompany(this);
+//    }
+//
+//    public void removeJobAd(JobAd jobAd) {
+//        this.jobAds.remove(jobAd);
+//        jobAd.setCompany(null);
+//    }
 }

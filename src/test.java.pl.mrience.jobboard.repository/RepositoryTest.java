@@ -15,7 +15,6 @@ import pl.mrience.jobboard.repository.AddressRepository;
 import pl.mrience.jobboard.repository.CompanyRepository;
 import pl.mrience.jobboard.repository.KeywordRepository;
 
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -72,26 +71,68 @@ public class RepositoryTest {
                 .keywords(Set.of(keyword))
                 .company(company)
                 .build();
+
+        companyRepository.save(company);
+        jobAdRepository.save(jobAd);
     }
 
     @AfterEach
     private void destructEach() {
-        //jobAdRepository.deleteById(jobAd.getJobAdId());
-        //keywordRepository.deleteById(keyword.getKeyword());
+        if (jobAdRepository.existsById(this.jobAd.getJobAdId()))
+            jobAdRepository.deleteById(this.jobAd.getJobAdId());
+
+        if (keywordRepository.existsById(this.keyword.getKeyword()))
+            keywordRepository.deleteById(this.keyword.getKeyword());
+
+        if (addressRepository.existsById(this.address.getAddressId()))
+            addressRepository.deleteById(this.address.getAddressId());
+
+        if (companyRepository.existsByNip(this.company.getNip()))
+            companyRepository.deleteByNip(this.company.getNip());
     }
 
     @Test
     public void shouldSaveJobAdToDatabase() {
-        companyRepository.save(company);
-        jobAdRepository.save(jobAd);
-
-        Assertions.assertEquals(jobAd, jobAdRepository.getOne(jobAd.getJobAdId()));
+        Assertions.assertEquals(this.jobAd, jobAdRepository.getOne(this.jobAd.getJobAdId()));
         Assertions.assertFalse(jobAdRepository.findAll().isEmpty());
     }
 
     @Test
     public void shouldDeleteJobAdsWhenDeleteCompany() {
+        Assertions.assertTrue(jobAdRepository.existsById(this.jobAd.getJobAdId()));
+        companyRepository.delete(this.company);
+        Assertions.assertFalse(jobAdRepository.existsById(this.jobAd.getJobAdId()));
+    }
 
+    @Test
+    public void shouldNotDeleteCompanyAndAddressWhenDeleteJobAd() {
+        jobAdRepository.delete(this.jobAd);
+        Assertions.assertFalse(companyRepository.findAll().isEmpty());
+    }
+
+    @Test
+    public void shouldDeleteAddressWhenDeleteJobAd() {
+        Assertions.assertTrue(addressRepository.existsById(this.address.getAddressId()));
+        jobAdRepository.delete(this.jobAd);
+        Assertions.assertFalse(addressRepository.existsById(this.address.getAddressId()));
+    }
+
+    @Test
+    public void shouldNotDeleteJobAdWhenDeleteAddress() {
+        addressRepository.deleteById(this.address.getAddressId());
+        Assertions.assertTrue(jobAdRepository.existsById(this.jobAd.getJobAdId()));
+    }
+
+    @Test
+    public void shouldNotDeleteKeywordWhenDeleteJobAd() {
+        jobAdRepository.delete(this.jobAd);
+        Assertions.assertTrue(keywordRepository.existsById(keyword.getKeyword()));
+    }
+
+    @Test
+    public void shouldNotDeleteJobAdWhenDeleteKeyword() {
+        keywordRepository.deleteById(this.keyword.getKeyword());
+        Assertions.assertTrue(jobAdRepository.existsById(this.jobAd.getJobAdId()));
     }
 
 }
